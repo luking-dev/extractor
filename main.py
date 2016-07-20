@@ -1,8 +1,11 @@
-def os_detect():
-    return os.name
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import argparse, sys
+from os import name, system
 
 
-class Registry():
+class Registry(object):
     def extract(self, archive, dir):
         filename = archive.split('.')
         if len(filename) == 2:
@@ -36,16 +39,41 @@ class Registry():
         return cmd + self.archive + ' ' + self.directorie
 
 
-a = raw_input('> Extract: ')
-a = a.split()
-if len(a) == 1:
-    archive = a
-    if os_detect() == 'posix':
-        directorie = '.'
-elif len(a) == 2:
-    archive = a[0]
-    directorie = a[1]
+def check_dir(dir):
+    if len(dir) == 0:
+        if os_name() == 'posix':
+            return '.'
+        else:
+            return ''
+
+if __name__ == '__main__':
+    file = sys.argv[1]
+    dir_from = check_dir(sys.argv[2])
+    dir_to = check_dir(sys.argv[3])
+    e = Registry()
+    e.extract(file, dir_from)
+    print "File extracted to '{0}'".format(dir_to)
+
+    '''parser = argparse.ArgumentParser()
+    parser.add_argument("-v", "--verbose", help="Mostrar información de depuración", action="store_true")
+    parser.add_argument("-f", "--file", help="Nombre de archivo a procesar", action="store_true")
+    args = parser.parse_args()
+
+    # Process each argument
+    if args.verbose:
+        print "depuración activada!!!"
+    if args.file:
+        print "El nombre de archivo a procesar es: ", args.file'''
 
 
-f = Registry()
-system(f.extract(archive, directorie))
+    '''a = raw_input('> Extract: ')
+    a = a.split()
+    if len(a) == 1:
+        archive = a
+        if os_name() == 'posix':
+            directorie = '.'
+        else:
+            directorie = ''
+    elif len(a) == 2:
+        archive = a[0]
+        directorie = a[1]'''
